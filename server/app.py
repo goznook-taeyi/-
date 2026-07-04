@@ -28,9 +28,18 @@ ALLOWED_HOSTS = {
     "youtu.be",
 }
 
-# CORS 설정이 없는 이유: 요청은 확장의 서비스 워커가 host_permissions로
-# 보내므로 CORS 검사 대상이 아니다.
 app = Flask(__name__)
+
+
+@app.after_request
+def add_cors_headers(resp):
+    # 크롬 확장(서비스 워커)은 host_permissions 덕분에 CORS가 필요 없지만,
+    # 숏폼솔팅기 같은 로컬 웹앱이 이 API를 호출할 때는 필요하다.
+    # 서버가 127.0.0.1에만 바인딩되어 같은 PC에서만 접근 가능하므로 * 허용은 안전하다.
+    resp.headers["Access-Control-Allow-Origin"] = "*"
+    resp.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    resp.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    return resp
 
 # job_id -> {"status": "downloading"|"done"|"error", "progress": float, ...}
 jobs = {}
@@ -93,6 +102,12 @@ def start_job(url: str) -> str:
         jobs[job_id] = {"status": "downloading", "progress": 0.0, "url": url}
     threading.Thread(target=run_download, args=(job_id, url), daemon=True).start()
     return job_id
+
+
+@app.get("/")
+def index():
+    """숏폼 솔팅기 웹 UI — URL을 모아 골라내고 바로 다운로드하는 페이지."""
+    return app.send_static_file("index.html")
 
 
 @app.get("/health")
