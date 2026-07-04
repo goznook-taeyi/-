@@ -11,12 +11,31 @@
 
 즉, 사용자가 이미 쓰고 있는 **솔팅기 대시보드**의 영상 목록에서, 각 영상(특히 골라낸 영상) **우측에 ⬇ 다운로드 버튼**을 달고, 누르면 그 영상이 바로 mp4로 저장되게 만드는 것.
 
-## 대상 프로그램 (로컬)
+## 로컬 PC에 있는 두 프로젝트 (혼동 주의)
 
-- 위치: `C:\Users\2taey\hospital-shorts`
-- 실행: 바탕화면 아이콘 → `start_solting.vbs`(숨김) → `start_solting.bat` → 파이썬 서버 실행 + 브라우저 자동 오픈
-- 주요 파일(폴더 목록에서 확인됨): `run_solting.py`(대시보드 서버로 추정, 7KB), `auto_collect.py`, `auto_pipeline.py`, `iglogin.py`, `config/`, `data/`, `site/`, `src/`, `requirements`, `.env`
-- 파이썬 기반이고 로컬 웹 대시보드를 띄우는 구조 (Python은 이미 정상 설치·동작 중)
+사용자 PC에는 이름이 비슷한 두 프로그램이 있는데, 버튼이 들어갈 곳은 **①번**이다.
+
+**① `C:\Users\2taey\hospital-shorts` — 솔팅기 (← 이 작업의 대상)**
+- 숏츠 트렌드를 수집·분석해 **골라낸 영상 목록 대시보드**를 만드는 파이썬 파이프라인.
+- 실행: 바탕화면 아이콘 → `start_solting.vbs`(숨김) → `start_solting.bat`.
+- `run_solting.py` = 파이프라인 실행기(CLI, 대시보드 아님). 확인 결과 마지막 단계에서
+  **`src/build_site.py` 가 대시보드 화면을 생성**한다(빌드 순서: build_library → build_kb →
+  build_playbooks → **build_site**). 즉 **영상 목록을 렌더링하는 곳은 `src/build_site.py`**.
+- 데이터: SQLite DB(`src/db.py`, `src/common.py`), `data/knowledge_base.json`, `data/library`,
+  `site/`(생성된 정적 사이트로 추정).
+- **다운로드 버튼은 이 대시보드의 영상 항목 우측에 넣는다.**
+
+**② `C:\ai-projects\shortform` — 콘텐츠마케터 키티 (버튼 대상 아님)**
+- `mascot.py` = PySide6 바탕화면 마스코트 + 핑크 채팅창. 클릭하면 `claude -p`(로컬 Claude Code)를
+  호출해 기획안을 만들고 구글 시트를 생성하는 도우미. **영상 목록이 없으므로 버튼 자리 없음.**
+- 참고로 여기서 **로컬에 Claude Code가 설치돼 있음이 확인됨**: `C:\Users\2taey\.local\bin\claude.exe`,
+  파이썬은 `C:\Users\2taey\AppData\Local\Programs\Python\Python312\python.exe`.
+
+## 로컬에서 먼저 읽을 파일
+
+`src/build_site.py`(대시보드 생성 = 버튼을 넣을 곳)와 `start_solting.bat`(실행/서빙 방식 확인,
+다운로드 서버를 함께 켜지게 손볼 곳). 대시보드가 정적 HTML이면 백엔드가 없으므로,
+아래 다운로드 로직을 담은 작은 로컬 서버를 만들어 `start_solting.bat`에서 함께 실행한다.
 
 ## 로컬에서 해야 할 작업
 
