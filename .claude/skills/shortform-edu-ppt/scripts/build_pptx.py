@@ -10,7 +10,7 @@ references/design-reference.md 의 디자인 토큰(바이올렛 단일 액센�
 
 deck.json 형식:
 {
-  "aspect": "9:16",                # 또는 "16:9"
+  "aspect": "16:9",                # 기본(PPT 표준). 세로 숏폼 영상용은 "9:16"
   "slides": [
     {"type": "cover",   "eyebrow": "SCIENCE SHORTS", "title": "광합성,\n3분 정리", "sub": "설명", "emoji": "🌱"},
     {"type": "concept", "eyebrow": "STEP 1", "title": "제목", "lead": "리드 문장",
@@ -185,7 +185,7 @@ def _chip(slide, x, y, text):
 
 
 class Deck:
-    def __init__(self, aspect="9:16"):
+    def __init__(self, aspect="16:9"):
         self.prs = Presentation()
         if aspect == "9:16":
             self.prs.slide_width = Emu(6858000)    # 7.5in
@@ -346,10 +346,10 @@ def main():
         sys.exit(1)
     with open(sys.argv[1], encoding="utf-8") as f:
         spec = json.load(f)
-    deck = Deck(spec.get("aspect", "9:16"))
+    deck = Deck(spec.get("aspect", "16:9"))
     deck.build(spec["slides"])
     deck.prs.save(sys.argv[2])
-    print(f"saved: {sys.argv[2]} ({len(spec['slides'])} slides, {spec.get('aspect', '9:16')})")
+    print(f"saved: {sys.argv[2]} ({len(spec['slides'])} slides, {spec.get('aspect', '16:9')})")
 
 
 if __name__ == "__main__":
