@@ -1,0 +1,285 @@
+<title>숏폼 교육 PPT 디자인 — 6개 파트 예시</title>
+<style>
+  :root{
+    --primary:#7C3AED; --primary-deep:#5B21B6;
+    --lav100:#EDE9FE; --lav300:#C4B5FD; --lav-track:#E4DEFB;
+    --grad-a:#C7C2F5; --grad-b:#9F8DF2;
+    --canvas:#F5F4F7; --card-gray:#E9E7EE; --divider:#D9D6E0;
+    --ink:#1A1A1E; --ink-sub:#5C5C66; --white:#fff;
+    --page-bg:#EEECF1; --page-fg:#3A3742; --page-muted:#8A8693;
+    --frame-shadow:0 18px 50px rgba(26,26,30,.14);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --page-bg:#141317; --page-fg:#E9E7EE; --page-muted:#8F8A99;
+           --frame-shadow:0 18px 50px rgba(0,0,0,.5); }
+  }
+  :root[data-theme="dark"]{ --page-bg:#141317; --page-fg:#E9E7EE; --page-muted:#8F8A99;
+           --frame-shadow:0 18px 50px rgba(0,0,0,.5); }
+  :root[data-theme="light"]{ --page-bg:#EEECF1; --page-fg:#3A3742; --page-muted:#8A8693;
+           --frame-shadow:0 18px 50px rgba(26,26,30,.14); }
+
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{
+    background:var(--page-bg); color:var(--page-fg);
+    font-family:'Pretendard','Pretendard Variable',-apple-system,BlinkMacSystemFont,
+      'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif;
+    -webkit-font-smoothing:antialiased; padding:48px 20px 80px; line-height:1.5;
+  }
+  .wrap{max-width:920px; margin:0 auto; display:flex; flex-direction:column; gap:46px}
+  header.intro{margin-bottom:6px}
+  header.intro .kick{font-size:12px; font-weight:800; letter-spacing:.14em;
+    color:var(--primary); text-transform:uppercase}
+  header.intro h1{font-size:26px; font-weight:800; color:var(--page-fg);
+    margin-top:8px; letter-spacing:-.01em; text-wrap:balance}
+  header.intro p{font-size:14px; color:var(--page-muted); margin-top:10px; max-width:62ch}
+
+  figure{margin:0}
+  figcaption{display:flex; align-items:baseline; gap:10px; margin-bottom:12px}
+  figcaption .n{font-size:12px; font-weight:800; color:#fff; background:var(--primary);
+    width:26px; height:26px; border-radius:8px; display:inline-grid; place-items:center;
+    flex:none; letter-spacing:0}
+  figcaption b{font-size:15px; font-weight:700; color:var(--page-fg)}
+  figcaption span{font-size:12.5px; color:var(--page-muted)}
+
+  /* 16:9 슬라이드 프레임 */
+  .slide{
+    container-type:inline-size;
+    position:relative; width:100%; aspect-ratio:16/9; border-radius:20px;
+    overflow:hidden; box-shadow:var(--frame-shadow); color:var(--ink);
+    background:var(--canvas);
+  }
+  .grad{background:linear-gradient(135deg,var(--grad-a) 0%,var(--grad-b) 100%)}
+  .pad{position:absolute; inset:0; padding:7.5cqw}
+
+  .eyebrow{font-size:2cqw; font-weight:800; letter-spacing:.12em; text-transform:uppercase}
+  .eyebrow.p{color:var(--primary)} .eyebrow.w{color:#fff}
+  .title{font-weight:800; color:var(--ink); letter-spacing:-.02em; line-height:1.18; text-wrap:balance}
+  .lead{color:var(--ink-sub); line-height:1.6}
+
+  /* ---- 1 COVER ---- */
+  .cover{display:grid; place-content:center; text-align:center; gap:2.2cqw; padding:6cqw}
+  .cover .mascot{font-size:11cqw; line-height:1; filter:drop-shadow(0 8px 16px rgba(60,40,120,.28))}
+  .cover .eyebrow{font-size:2.2cqw}
+  .cover h2{font-size:7.4cqw; font-weight:800; color:#fff; letter-spacing:-.02em; line-height:1.14}
+  .cover .sub{font-size:2.5cqw; color:rgba(255,255,255,.92)}
+
+  /* ---- 2 GOAL + CARDS + CONNECTOR + BAND ---- */
+  .s2 .head h2{font-size:4.4cqw}
+  .s2 .head .eyebrow{font-size:2cqw; margin-bottom:1.4cqw}
+  .s2 .head .lead{font-size:1.8cqw; margin-top:1.4cqw; max-width:70%}
+  .row3{position:absolute; left:7.5cqw; right:7.5cqw; top:30cqw; display:flex; gap:3cqw}
+  .scard{flex:1; background:var(--card-gray); border-radius:2.6cqw; padding:3cqw 2.6cqw 2.8cqw;
+    position:relative; min-height:20cqw}
+  .scard .badge{position:absolute; top:-1.4cqw; left:2.4cqw; background:var(--primary);
+    color:#fff; font-size:1.5cqw; font-weight:700; padding:.7cqw 1.6cqw; border-radius:1.4cqw}
+  .scard h3{font-size:2.5cqw; font-weight:800; color:var(--primary); margin-top:1.4cqw}
+  .scard .rule{height:1px; background:var(--divider); margin:1.6cqw 0}
+  .scard p{font-size:1.6cqw; color:var(--ink-sub); line-height:1.5}
+  .scard .ico{position:absolute; top:-3.4cqw; right:1.2cqw; font-size:5.6cqw;
+    filter:drop-shadow(0 4px 8px rgba(90,60,150,.25))}
+  .connect{position:absolute; left:7.5cqw; right:7.5cqw; top:50.5cqw; height:7cqw}
+  .band{position:absolute; left:5cqw; right:5cqw; bottom:4.5cqw; background:var(--primary);
+    border-radius:3cqw; padding:2.4cqw; text-align:center; box-shadow:0 10px 30px rgba(91,33,182,.32)}
+  .band .lab{font-size:1.7cqw; font-weight:700; color:rgba(255,255,255,.85)}
+  .band .txt{font-size:2.9cqw; font-weight:800; color:#fff; margin-top:.6cqw; line-height:1.3}
+
+  /* ---- 3 GLASS BUBBLES ---- */
+  .s3{text-align:center}
+  .s3 .mark{font-size:4cqw; line-height:1}
+  .s3 .eyebrow{font-size:2.6cqw; margin:1cqw 0}
+  .s3 .lead{font-size:1.8cqw; color:rgba(40,30,80,.72); margin-bottom:1cqw}
+  .bubbles{position:absolute; inset:0; padding:6cqw 7cqw}
+  .bubble{position:absolute; width:44cqw; background:rgba(255,255,255,.5);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.55); border-radius:3cqw 3cqw 3cqw 3cqw;
+    padding:2.6cqw 3cqw; text-align:left; box-shadow:0 8px 24px rgba(70,50,130,.14)}
+  .bubble h3{font-size:2.2cqw; font-weight:800; color:var(--primary-deep)}
+  .bubble p{font-size:1.55cqw; color:var(--ink-sub); line-height:1.5; margin-top:.8cqw}
+  .bubble .emo{position:absolute; font-size:6cqw; line-height:1; top:-3cqw}
+  .b1{left:6cqw; top:18cqw} .b1 .emo{right:-2cqw}
+  .b2{right:6cqw; top:25cqw} .b2 .emo{left:-3cqw; top:2cqw}
+  .b3{left:26cqw; top:36cqw} .b3 .emo{right:-2.5cqw; top:-2cqw}
+
+  /* ---- 4 PERSONA / COMPARE CARDS ---- */
+  .s4 .head{margin-bottom:2cqw}
+  .s4 .head h2{font-size:4cqw}
+  .s4 .head .eyebrow{font-size:1.9cqw; margin-bottom:1cqw}
+  .pgrid{position:absolute; left:7.5cqw; right:7.5cqw; top:20cqw; display:flex; gap:3.5cqw}
+  .pcard{flex:1; background:#fff; border-radius:2.6cqw; padding:3cqw 3cqw 2.6cqw;
+    box-shadow:0 14px 34px rgba(26,26,30,.1); position:relative}
+  .pcard .wm{position:absolute; top:-1cqw; left:2.4cqw; font-size:7cqw; font-weight:800;
+    color:var(--lav300); line-height:1}
+  .pcard .plabel{position:absolute; top:2.2cqw; left:11cqw; font-size:1.7cqw; font-weight:700;
+    color:var(--primary); letter-spacing:.04em}
+  .phead{display:flex; align-items:center; gap:2cqw; margin-top:6cqw}
+  .phead .av{font-size:6cqw; line-height:1}
+  .phead .who{font-size:1.9cqw; color:var(--ink-sub); line-height:1.35}
+  .phead .who b{display:block; font-size:2.4cqw; color:var(--primary); font-weight:800; margin-top:.3cqw}
+  .pcard .dot{border-top:1.5px dashed var(--divider); margin:2.2cqw 0}
+  .bar{display:flex; align-items:center; gap:1.4cqw; margin-bottom:1.4cqw}
+  .bar .k{font-size:1.55cqw; color:var(--ink-sub); width:12cqw; flex:none}
+  .bar .track{flex:1; height:1.7cqw; background:var(--lav-track); border-radius:2cqw; overflow:hidden}
+  .bar .fill{height:100%; border-radius:2cqw; background:linear-gradient(90deg,#A78BFA,#7C3AED)}
+  .bar .v{font-size:1.7cqw; font-weight:800; color:var(--primary); width:6cqw; text-align:right; flex:none}
+  .chips{display:flex; flex-wrap:wrap; gap:1cqw; margin-top:1.8cqw}
+  .chip{font-size:1.35cqw; font-weight:700; color:var(--primary); background:var(--lav100);
+    padding:.7cqw 1.5cqw; border-radius:2cqw}
+
+  /* ---- 5 QUIZ ---- */
+  .s5{text-align:center}
+  .s5 .eyebrow{font-size:2.2cqw}
+  .s5 h2{font-size:4cqw; font-weight:800; color:#fff; margin:2cqw 0 3cqw; letter-spacing:-.01em}
+  .opts{display:flex; flex-direction:column; gap:2cqw; max-width:64cqw; margin:0 auto}
+  .opt{background:rgba(255,255,255,.58); backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px); border-radius:3cqw; padding:2.2cqw;
+    font-size:2.2cqw; font-weight:700; color:var(--primary-deep)}
+  .s5 .hint{font-size:1.6cqw; color:rgba(255,255,255,.9); margin-top:2.4cqw}
+
+  /* ---- 6 SUMMARY BAND ---- */
+  .s6{display:grid; place-content:center; gap:3cqw; text-align:center; padding:6cqw}
+  .s6 .sband{background:var(--primary); border-radius:4cqw; padding:6cqw 7cqw;
+    box-shadow:0 16px 40px rgba(91,33,182,.3)}
+  .s6 .sband .lab{font-size:2cqw; font-weight:700; color:rgba(255,255,255,.85)}
+  .s6 .sband .txt{font-size:4.6cqw; font-weight:800; color:#fff; line-height:1.35; margin-top:1.4cqw}
+  .s6 .recall{font-size:2.1cqw; font-weight:700; color:var(--primary-deep)}
+
+  .note{font-size:12.5px; color:var(--page-muted); text-align:center; margin-top:8px; line-height:1.7}
+</style>
+
+<div class="wrap">
+  <header class="intro">
+    <div class="kick">Design Showcase · 광합성 3분 강의</div>
+    <h1>숏폼 교육 PPT 디자인 — 6개 파트 예시</h1>
+    <p>사용자 레퍼런스의 디자인 언어(바이올렛 단일 액센트 · 웜그레이 캔버스 · 큰 라운드 카드 · 걸침 이모지 · 라벤더 그라데이션)를 6개 파트로 나눠 각기 다른 레이아웃에 적용했습니다. 16:9 표준 비율입니다.</p>
+  </header>
+
+  <!-- 1 -->
+  <figure>
+    <figcaption><span class="n">1</span><b>표지 (Cover)</b><span>그라데이션 히어로 + 아이브로 + 큰 타이틀 + 마스코트</span></figcaption>
+    <div class="slide grad">
+      <div class="pad cover">
+        <div class="mascot">🌱</div>
+        <div class="eyebrow w">Science Shorts</div>
+        <h2>광합성, 3분 정리</h2>
+        <div class="sub">식물은 어떻게 햇빛을 밥으로 바꿀까?</div>
+      </div>
+    </div>
+  </figure>
+
+  <!-- 2 -->
+  <figure>
+    <figcaption><span class="n">2</span><b>목표 + 카드 + 연결선 + Goal 밴드</b><span>원인 3개가 하나의 결론으로 수렴하는 패턴</span></figcaption>
+    <div class="slide s2">
+      <div class="pad">
+        <div class="head">
+          <div class="eyebrow p">Learning Goal</div>
+          <h2 class="title">오늘 배울 것을 한눈에</h2>
+          <p class="lead">광합성을 이해하려면 세 가지 조각을 먼저 맞춰야 해요. 이 셋이 모이면 하나의 결론에 도달합니다.</p>
+        </div>
+      </div>
+      <div class="row3">
+        <div class="scard"><div class="badge">개념 1</div><div class="ico">☀️</div>
+          <h3>빛 에너지</h3><div class="rule"></div><p>햇빛이 반응을 일으키는 에너지원이 돼요.</p></div>
+        <div class="scard"><div class="badge">개념 2</div><div class="ico">💧</div>
+          <h3>물과 CO₂</h3><div class="rule"></div><p>뿌리의 물과 잎의 이산화탄소가 재료예요.</p></div>
+        <div class="scard"><div class="badge">개념 3</div><div class="ico">🔬</div>
+          <h3>엽록체</h3><div class="rule"></div><p>이 모든 일이 잎 속 엽록체에서 일어나요.</p></div>
+      </div>
+      <svg class="connect" viewBox="0 0 100 14" preserveAspectRatio="none" aria-hidden="true">
+        <g fill="none" stroke="#7C3AED" stroke-width=".4">
+          <circle cx="16.6" cy="1" r="1.1" fill="#7C3AED" stroke="none"/>
+          <circle cx="50" cy="1" r="1.1" fill="#7C3AED" stroke="none"/>
+          <circle cx="83.4" cy="1" r="1.1" fill="#7C3AED" stroke="none"/>
+          <path d="M16.6 1 V5 Q16.6 7 18.6 7 H81.4 Q83.4 7 83.4 5 V1"/>
+          <path d="M50 1 V7"/>
+          <path d="M50 7 V13"/>
+        </g>
+      </svg>
+      <div class="band"><div class="lab">Goal</div>
+        <div class="txt">빛·물·CO₂가 엽록체에서 만나 양분과 산소를 만든다</div></div>
+    </div>
+  </figure>
+
+  <!-- 3 -->
+  <figure>
+    <figcaption><span class="n">3</span><b>글래스 말풍선 (오개념)</b><span>반투명 블러 카드 지그재그 + 걸침 이모지</span></figcaption>
+    <div class="slide grad s3">
+      <div class="pad">
+        <div class="mark">✺</div>
+        <div class="eyebrow w">자주 하는 오개념</div>
+        <p class="lead">학생들이 광합성에서 흔히 헷갈리는 지점들이에요.</p>
+      </div>
+      <div class="bubbles">
+        <div class="bubble b1"><span class="emo">😕</span>
+          <h3>“식물은 밤에 숨을 안 쉰다?”</h3>
+          <p>광합성은 낮에만 하지만, 호흡은 밤낮 계속해요.</p></div>
+        <div class="bubble b2"><span class="emo">🤔</span>
+          <h3>“양분은 뿌리에서 온다?”</h3>
+          <p>물·무기양분은 뿌리, 포도당은 잎에서 직접 만들어요.</p></div>
+        <div class="bubble b3"><span class="emo">🤨</span>
+          <h3>“광합성 = 산소 만들기?”</h3>
+          <p>산소는 부산물이고, 진짜 목적은 양분(포도당) 생성이에요.</p></div>
+      </div>
+    </div>
+  </figure>
+
+  <!-- 4 -->
+  <figure>
+    <figcaption><span class="n">4</span><b>비교 카드 (퍼소나형)</b><span>워터마크 문자 + 아바타 + 진행바 + 해시 칩</span></figcaption>
+    <div class="slide s4">
+      <div class="pad">
+        <div class="head">
+          <div class="eyebrow p">Compare</div>
+          <h2 class="title">명반응 vs 암반응</h2>
+        </div>
+      </div>
+      <div class="pgrid">
+        <div class="pcard"><div class="wm">A</div><div class="plabel">명반응</div>
+          <div class="phead"><span class="av">🔆</span>
+            <div class="who">빛이 있어야 작동하는<b>빛의 반응</b></div></div>
+          <div class="dot"></div>
+          <div class="bar"><span class="k">빛 필요도</span><div class="track"><div class="fill" style="width:100%"></div></div><span class="v">100%</span></div>
+          <div class="bar"><span class="k">산소 발생</span><div class="track"><div class="fill" style="width:90%"></div></div><span class="v">높음</span></div>
+          <div class="chips"><span class="chip">#틸라코이드</span><span class="chip">#ATP생성</span><span class="chip">#물분해</span></div>
+        </div>
+        <div class="pcard"><div class="wm">B</div><div class="plabel">암반응</div>
+          <div class="phead"><span class="av">🌙</span>
+            <div class="who">빛 없이도 도는<b>탄소 고정 반응</b></div></div>
+          <div class="dot"></div>
+          <div class="bar"><span class="k">빛 필요도</span><div class="track"><div class="fill" style="width:15%"></div></div><span class="v">15%</span></div>
+          <div class="bar"><span class="k">포도당 생성</span><div class="track"><div class="fill" style="width:95%"></div></div><span class="v">높음</span></div>
+          <div class="chips"><span class="chip">#스트로마</span><span class="chip">#캘빈회로</span><span class="chip">#CO₂고정</span></div>
+        </div>
+      </div>
+    </div>
+  </figure>
+
+  <!-- 5 -->
+  <figure>
+    <figcaption><span class="n">5</span><b>점검 질문 (Quiz)</b><span>글래스 보기 pill · 정답은 다음 장에</span></figcaption>
+    <div class="slide grad s5">
+      <div class="pad">
+        <div class="eyebrow w">Check</div>
+        <h2>광합성으로 식물이<br>내보내는 기체는?</h2>
+        <div class="opts">
+          <div class="opt">A.  이산화탄소</div>
+          <div class="opt">B.  산소</div>
+          <div class="opt">C.  질소</div>
+        </div>
+        <div class="hint">👆 화면을 멈추고 먼저 골라보세요</div>
+      </div>
+    </div>
+  </figure>
+
+  <!-- 6 -->
+  <figure>
+    <figcaption><span class="n">6</span><b>요약 밴드 (Summary)</b><span>primary 강조 밴드 결론 + 인출연습</span></figcaption>
+    <div class="slide s6">
+      <div class="sband"><div class="lab">Summary</div>
+        <div class="txt">빛 + 물 + CO₂<br>→ 양분 + 산소</div></div>
+      <div class="recall">🧠 화면을 멈추고, 광합성에 필요한 재료 3가지를 말해보세요</div>
+    </div>
+  </figure>
+
+  <p class="note">이 6장은 동일한 디자인 토큰을 서로 다른 레이아웃에 적용한 예시입니다. HTML은 블러·그림자·그라데이션을 완전히 렌더하며, .pptx로 뽑을 때는 글래스 블러만 반투명으로 근사됩니다(design-reference.md §7).</p>
+</div>
