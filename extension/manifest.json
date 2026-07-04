@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Shorts Downloader",
+  "version": "1.0.0",
+  "description": "유튜브 숏츠/영상 페이지에 다운로드 버튼을 추가합니다. 로컬 서버(python server/app.py)가 실행 중이어야 합니다.",
+  "host_permissions": ["http://127.0.0.1:8756/*"],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*", "https://m.youtube.com/*"],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}

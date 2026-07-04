@@ -1,0 +1,123 @@
+"""유튜브 숏츠/영상 다운로드 로컬 서버.
+
+크롬 확장에서 보낸 유튜브 URL을 받아 yt-dlp로 mp4를 내려받는다.
+127.0.0.1 에서만 리슨하므로 외부에서는 접근할 수 없다.
+
+실행:
+    pip install -r requirements.txt
+    python app.py
+"""
+
+import shutil
+import threading
+import uuid
+from pathlib import Path
+from urllib.parse import urlparse
+
+import yt_dlp
+from flask import Flask, jsonify, request
+
+HOST = "127.0.0.1"
+PORT = 8756
+DOWNLOAD_DIR = Path.home() / "Downloads" / "YouTube"
+
+ALLOWED_HOSTS = {
+    "www.youtube.com",
+    "youtube.com",
+    "m.youtube.com",
+    "youtu.be",
+}
+
+# CORS 설정이 없는 이유: 요청은 확장의 서비스 워커가 host_permissions로
+# 보내므로 CORS 검사 대상이 아니다.
+app = Flask(__name__)
+
+# job_id -> {"status": "downloading"|"done"|"error", "progress": float, ...}
+jobs = {}
+jobs_lock = threading.Lock()
+
+
+def is_youtube_url(url: str) -> bool:
+    try:
+        parsed = urlparse(url)
+    except ValueError:
+        return False
+    return parsed.scheme in ("http", "https") and parsed.hostname in ALLOWED_HOSTS
+
+
+def build_format() -> str:
+    # ffmpeg이 있으면 최고 화질 영상+오디오를 mp4로 병합, 없으면 단일 mp4 스트림
+    if shutil.which("ffmpeg"):
+        return "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]/best"
+    return "b[ext=mp4]/best"
+
+
+def update_job(job_id: str, **fields):
+    with jobs_lock:
+        if job_id in jobs:
+            jobs[job_id].update(fields)
+
+
+def run_download(job_id: str, url: str):
+    def progress_hook(d):
+        if d["status"] == "downloading":
+            total = d.get("total_bytes") or d.get("total_bytes_estimate")
+            downloaded = d.get("downloaded_bytes", 0)
+            if total:
+                update_job(job_id, progress=round(downloaded / total * 100, 1))
+        elif d["status"] == "finished":
+            update_job(job_id, progress=100.0)
+
+    ydl_opts = {
+        "format": build_format(),
+        "outtmpl": str(DOWNLOAD_DIR / "%(title)s [%(id)s].%(ext)s"),
+        "merge_output_format": "mp4",
+        "noplaylist": True,
+        "progress_hooks": [progress_hook],
+        "quiet": True,
+        "no_warnings": True,
+    }
+    try:
+        DOWNLOAD_DIR.mkdir(parents=True, exist_ok=True)
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=True)
+        filename = Path(ydl.prepare_filename(info)).name
+        update_job(job_id, status="done", progress=100.0, filename=filename)
+    except Exception as exc:  # yt-dlp는 다양한 예외를 던진다
+        update_job(job_id, status="error", error=str(exc))
+
+
+@app.get("/health")
+def health():
+    return jsonify({"ok": True})
+
+
+@app.post("/download")
+def download():
+    data = request.get_json(silent=True) or {}
+    url = data.get("url", "")
+    if not is_youtube_url(url):
+        return jsonify({"error": "유튜브 URL이 아닙니다."}), 400
+
+    job_id = uuid.uuid4().hex
+    with jobs_lock:
+        jobs[job_id] = {"status": "downloading", "progress": 0.0, "url": url}
+    threading.Thread(target=run_download, args=(job_id, url), daemon=True).start()
+    return jsonify({"job_id": job_id})
+
+
+@app.get("/status/<job_id>")
+def status(job_id):
+    with jobs_lock:
+        job = jobs.get(job_id)
+        if job is None:
+            return jsonify({"error": "존재하지 않는 작업입니다."}), 404
+        return jsonify(job)
+
+
+if __name__ == "__main__":
+    print(f"저장 위치: {DOWNLOAD_DIR}")
+    if not shutil.which("ffmpeg"):
+        print("안내: ffmpeg이 없어 단일 mp4 스트림으로 받습니다. "
+              "최고 화질을 원하면 ffmpeg을 설치하세요.")
+    app.run(host=HOST, port=PORT)
