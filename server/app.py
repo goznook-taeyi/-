@@ -87,6 +87,14 @@ def run_download(job_id: str, url: str):
         update_job(job_id, status="error", error=str(exc))
 
 
+def start_job(url: str) -> str:
+    job_id = uuid.uuid4().hex
+    with jobs_lock:
+        jobs[job_id] = {"status": "downloading", "progress": 0.0, "url": url}
+    threading.Thread(target=run_download, args=(job_id, url), daemon=True).start()
+    return job_id
+
+
 @app.get("/health")
 def health():
     return jsonify({"ok": True})
@@ -98,12 +106,34 @@ def download():
     url = data.get("url", "")
     if not is_youtube_url(url):
         return jsonify({"error": "유튜브 URL이 아닙니다."}), 400
+    return jsonify({"job_id": start_job(url)})
 
-    job_id = uuid.uuid4().hex
+
+@app.post("/download/batch")
+def download_batch():
+    """숏폼솔팅기 같은 외부 프로그램이 골라낸 영상 목록을 일괄 다운로드한다.
+
+    요청:  {"urls": ["https://www.youtube.com/shorts/...", ...]}
+    응답:  {"jobs": [{"url": ..., "job_id": ...} 또는 {"url": ..., "error": ...}]}
+    """
+    data = request.get_json(silent=True) or {}
+    urls = data.get("urls")
+    if not isinstance(urls, list) or not urls:
+        return jsonify({"error": "urls 목록이 필요합니다."}), 400
+
+    results = []
+    for url in urls:
+        if not isinstance(url, str) or not is_youtube_url(url):
+            results.append({"url": url, "error": "유튜브 URL이 아닙니다."})
+        else:
+            results.append({"url": url, "job_id": start_job(url)})
+    return jsonify({"jobs": results})
+
+
+@app.get("/jobs")
+def list_jobs():
     with jobs_lock:
-        jobs[job_id] = {"status": "downloading", "progress": 0.0, "url": url}
-    threading.Thread(target=run_download, args=(job_id, url), daemon=True).start()
-    return jsonify({"job_id": job_id})
+        return jsonify(jobs)
 
 
 @app.get("/status/<job_id>")

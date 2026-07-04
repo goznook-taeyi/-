@@ -41,6 +41,45 @@ python server/app.py
 
 서버가 꺼져 있으면 "로컬 서버를 먼저 실행하세요" 안내가 표시됩니다.
 
+## 외부 프로그램 연동 (예: 숏폼솔팅기)
+
+숏폼솔팅기처럼 영상을 골라내는 프로그램에서 선택된 URL 목록을 넘겨 일괄 다운로드할 수 있습니다. 두 가지 방법을 제공합니다.
+
+### 방법 1 — HTTP API (서버 실행 중일 때)
+
+```python
+import requests
+
+selected = [
+    "https://www.youtube.com/shorts/AAAA",
+    "https://www.youtube.com/shorts/BBBB",
+]
+res = requests.post("http://127.0.0.1:8756/download/batch", json={"urls": selected})
+print(res.json())   # 각 URL의 job_id (진행률은 GET /status/<job_id> 또는 GET /jobs 로 확인)
+```
+
+### 방법 2 — CLI / 파이썬 임포트 (서버 없이)
+
+```bash
+# 한 줄에 URL 하나인 텍스트 파일로
+python server/batch_download.py 골라낸영상들.txt
+
+# 또는 URL을 직접 나열
+python server/batch_download.py https://www.youtube.com/shorts/AAAA https://www.youtube.com/shorts/BBBB
+```
+
+숏폼솔팅기가 파이썬 프로젝트라면 함수로 바로 불러 쓸 수도 있습니다.
+
+```python
+import sys
+sys.path.insert(0, r"이_저장소_경로\server")   # 예: C:\ai-projects 쪽 코드에서
+
+from batch_download import download_all
+done, failed = download_all(selected)
+```
+
+다운로드 결과는 모두 `~/Downloads/YouTube/` 에 저장됩니다.
+
 ## 주의
 
 이 도구는 **본인이 시청 권한을 가진 영상을 개인 소장 용도로** 저장하기 위한 것입니다.
